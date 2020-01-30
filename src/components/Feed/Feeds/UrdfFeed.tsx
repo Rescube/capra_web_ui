@@ -5,7 +5,7 @@ import { NoFeed } from 'components/Feed/Feeds/utils/NoFeed'
 import { IUrdfFeed } from 'store/modules/feed/@types'
 import { rosClient } from 'utils/ros/rosClient'
 import * as ROS3D from 'ros3d'
-import ROSLIB, { TFClient } from 'roslib'
+import { TFClient } from 'roslib'
 import { useRefSize } from 'utils/hooks/useRefSize'
 import _ from 'lodash'
 
@@ -63,13 +63,13 @@ const View: FC<Props> = ({ feed }) => {
   useEffect(() => {
     if (viewer) {
       const ros = rosClient.ros
-      const mesh = new ROS3D.MeshResource({
-        resource: 'test.dae',
-        path: '/',
-        warnings: true,
-      })
-
-      viewer.addObject(mesh)
+      // const mesh = new ROS3D.MeshResource({
+      //   resource: 'test.dae',
+      //   path: '/',
+      //   warnings: true,
+      // })
+      // console.log(mesh)
+      // viewer.addObject(mesh)
 
       const tfClient = new TFClient({
         ros: ros,
@@ -88,15 +88,13 @@ const View: FC<Props> = ({ feed }) => {
         // loader: ROS3D.COLLADA_LOADER_2,
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [viewer])
 
   return <StyledViewer id={id} ref={ref} />
 }
 
 export const UrdfFeed: FC<Props> = ({ feed }) => {
   const connected = useSelector(state => state.ros.connected)
-
   return (
     <Grid>{!connected ? <View feed={feed} /> : <NoFeed text="no urdf" />}</Grid>
   )
